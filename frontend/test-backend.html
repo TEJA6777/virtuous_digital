@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Backend Connection Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            margin: 10px 5px;
+            cursor: pointer;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 5px;
+            white-space: pre-wrap;
+        }
+        .success {
+            background-color: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+        .error {
+            background-color: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+    </style>
+</head>
+<body>
+    <h1>Backend Connection Test</h1>
+    <p>Use this page to test if your backend is accessible.</p>
+    
+    <button onclick="testConnection()">Test GET /students</button>
+    <button onclick="testCORS()">Test CORS</button>
+    <button onclick="clearResults()">Clear</button>
+    
+    <div id="result"></div>
+
+    <script>
+        async function testConnection() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="info">Testing connection...</div>';
+            
+            try {
+                console.log('Testing: http://localhost:8080/students');
+                const response = await fetch('http://localhost:8080/students', {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+                
+                console.log('Response status:', response.status);
+                console.log('Response headers:', [...response.headers.entries()]);
+                
+                const text = await response.text();
+                console.log('Response text:', text);
+                
+                if (response.ok) {
+                    try {
+                        const json = JSON.parse(text);
+                        resultDiv.innerHTML = `
+                            <div class="success">
+                                <strong>✅ Connection Successful!</strong><br>
+                                Status: ${response.status} ${response.statusText}<br>
+                                Content-Type: ${response.headers.get('content-type')}<br>
+                                Data: ${JSON.stringify(json, null, 2)}<br>
+                                Students found: ${Array.isArray(json) ? json.length : 'N/A'}
+                            </div>
+                        `;
+                    } catch (e) {
+                        resultDiv.innerHTML = `
+                            <div class="error">
+                                <strong>⚠️ Response received but not JSON:</strong><br>
+                                Status: ${response.status}<br>
+                                Response: ${text.substring(0, 500)}
+                            </div>
+                        `;
+                    }
+                } else {
+                    resultDiv.innerHTML = `
+                        <div class="error">
+                            <strong>❌ Error Response:</strong><br>
+                            Status: ${response.status} ${response.statusText}<br>
+                            Response: ${text.substring(0, 500)}
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <strong>❌ Connection Failed!</strong><br>
+                        Error: ${error.name}<br>
+                        Message: ${error.message}<br><br>
+                        <strong>Possible causes:</strong><br>
+                        1. Backend not running on port 8080<br>
+                        2. CORS not configured<br>
+                        3. Firewall blocking connection<br>
+                        4. Wrong URL<br><br>
+                        <strong>Check:</strong><br>
+                        - Open http://localhost:8080/students in browser<br>
+                        - Check backend console for errors<br>
+                        - Verify @CrossOrigin annotation in controller
+                    </div>
+                `;
+            }
+        }
+
+        async function testCORS() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div class="info">Testing CORS configuration...</div>';
+            
+            try {
+                const response = await fetch('http://localhost:8080/students', {
+                    method: 'OPTIONS',
+                    mode: 'cors',
+                    headers: {
+                        'Origin': window.location.origin,
+                        'Access-Control-Request-Method': 'GET'
+                    }
+                });
+                
+                const corsHeaders = {
+                    'Access-Control-Allow-Origin': response.headers.get('Access-Control-Allow-Origin'),
+                    'Access-Control-Allow-Methods': response.headers.get('Access-Control-Allow-Methods'),
+                    'Access-Control-Allow-Headers': response.headers.get('Access-Control-Allow-Headers')
+                };
+                
+                resultDiv.innerHTML = `
+                    <div class="${corsHeaders['Access-Control-Allow-Origin'] ? 'success' : 'error'}">
+                        <strong>CORS Headers:</strong><br>
+                        ${JSON.stringify(corsHeaders, null, 2)}<br><br>
+                        ${corsHeaders['Access-Control-Allow-Origin'] 
+                            ? '✅ CORS appears to be configured' 
+                            : '❌ CORS headers not found - check @CrossOrigin annotation'}
+                    </div>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div class="error">
+                        <strong>CORS Test Failed:</strong><br>
+                        ${error.message}
+                    </div>
+                `;
+            }
+        }
+
+        function clearResults() {
+            document.getElementById('result').innerHTML = '';
+        }
+
+        // Auto-test on load
+        window.onload = () => {
+            setTimeout(testConnection, 500);
+        };
+    </script>
+</body>
+</html>
+
