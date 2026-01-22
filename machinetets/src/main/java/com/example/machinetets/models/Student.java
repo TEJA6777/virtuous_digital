@@ -10,7 +10,7 @@ public class Student {
     @Column(name="student_id")
     long  id;
     @Column(name="student_name",nullable = false)
-    String strudentName;
+    String studentName;
     @Column(name="college_name",nullable = false)
     String collegeName;
     @Column(name="r1marks")
@@ -29,8 +29,8 @@ public class Student {
     int rank;
 
     public Student() {}
-    public Student(String strudentName, String collegeName, float round1Marks, float round2Marks, float round3Marks) {
-        this.strudentName = strudentName;
+    public Student(String studentName, String collegeName, float round1Marks, float round2Marks, float round3Marks) {
+        this.studentName = studentName;
         this.collegeName = collegeName;
         this.round1Marks = round1Marks;
         this.round2Marks = round2Marks;
@@ -46,12 +46,12 @@ public class Student {
         this.id = id;
     }
 
-    public String getStrudentName() {
-        return strudentName;
+    public String getStudentName() {
+        return studentName;
     }
 
-    public void setStrudentName(String strudentName) {
-        this.strudentName = strudentName;
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
     }
 
     public String getCollegeName() {

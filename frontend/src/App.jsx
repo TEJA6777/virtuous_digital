@@ -4,7 +4,7 @@ function App() {
   const [students, setStudents] = useState([]);
 
   const [form, setForm] = useState({
-    strudentName: "",
+    studentName: "",
     collegeName: "",
     round1Marks: "",
     round2Marks: "",
@@ -47,7 +47,7 @@ function App() {
     if (res.ok) {
       fetchStudents();
       setForm({
-        strudentName: "",
+        studentName: "",
         collegeName: "",
         round1Marks: "",
         round2Marks: "",
@@ -64,7 +64,7 @@ function App() {
       <h2>Add Student</h2>
 
       <form onSubmit={handleSubmit}>
-        <input name="strudentName" placeholder="Student Name" value={form.strudentName} onChange={handleChange} required />
+        <input name="studentName" placeholder="Student Name" value={form.studentName} onChange={handleChange} required />
         <br />
 
         <input name="collegeName" placeholder="College Name" value={form.collegeName} onChange={handleChange} required />
@@ -104,7 +104,7 @@ function App() {
           {students.map((s) => (
             <tr key={s.id}>
               <td>{s.id}</td>
-              <td>{s.strudentName}</td>
+              <td>{s.studentName}</td>
               <td>{s.collegeName}</td>
               <td>{s.totalMarks}</td>
               <td>{s.result}</td>

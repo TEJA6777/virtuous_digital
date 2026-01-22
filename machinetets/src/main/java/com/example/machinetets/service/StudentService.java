@@ -23,10 +23,10 @@ public class StudentService {
     }
 
     public boolean isNameValid(Student student) {
-        return student.getStrudentName()!=null && student.getStrudentName().length()>=3 && student.getStrudentName().length()<=30;
+        return student.getStudentName().length()>=3 && student.getStudentName().length()<=30;
     }
     public boolean isCollegeValid(Student student) {
-        return student.getCollegeName()!=null && student.getCollegeName().length()>=3 && student.getCollegeName().length()<=50;
+        return student.getCollegeName().length()>=3 && student.getCollegeName().length()<=50;
     }
     public boolean isRound1Valid(Student student) {
         return student.getRound1Marks()>=0 &&  student.getRound1Marks()<=10;
@@ -80,19 +80,19 @@ public class StudentService {
     }
 
     public int rankOfStudent(float totalMarks) {
-        if(totalMarks >=90) {
+        if(totalMarks >=45) {
             return 1;
-        } else if (totalMarks >= 80) {
+        } else if (totalMarks >= 40) {
             return 2;
-        }else if (totalMarks >= 70) {
-            return 3;
-        } else if (totalMarks >= 60) {
-            return 4;
-        }else if (totalMarks >= 50) {
-            return 5;
-        } else if (totalMarks >=40) {
-            return 6;
         }else if (totalMarks >= 35) {
+            return 3;
+        } else if (totalMarks >= 30) {
+            return 4;
+        }else if (totalMarks >= 25) {
+            return 5;
+        } else if (totalMarks >=20) {
+            return 6;
+        }else if (totalMarks >= 15) {
             return 7;
         }else{
             return 10;
