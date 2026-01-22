@@ -1,0 +1,34 @@
+{
+  "info": {
+    "_postman_id": "9a9d201c-3ef8-4e51-9501-9f8a4b8b8a61",
+    "name": "virtuous",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "42575927"
+  },
+  "item": [
+    {
+      "name": "get all students",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "add student",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    },
+    {
+      "name": "get by id",
+      "request": {
+        "method": "GET",
+        "header": []
+      },
+      "response": []
+    }
+  ]
+}
